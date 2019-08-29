@@ -38,7 +38,8 @@ class BST{
     std::pair<const K,V> data;
 
     Node();
-    Node(Node* p, std::pair<const K, V>& d) : parent{p}, data{d};
+    Node(Node* p, std::pair<const K, V>& d) : parent{p}, data{d}{
+    };
 
     ~Node() noexcept = default;
 
@@ -61,10 +62,10 @@ class BST{
   class Iterator;
   class Const_Iterator;
 
-  Iterator begin() noexcept { return Iterator{try get_min()}; }
+  Iterator begin() noexcept { return Iterator{get_min()}; }
   Iterator end() { return Iterator{nullptr}; }
 
-  Const_Iterator cbegin() noexcept {return Const_Iterator{try get_min()};}
+  Const_Iterator cbegin() noexcept {return Const_Iterator{get_min()};}
   Const_Iterator cend() const { return Const_Iterator{nullptr}; }
 
   /* BST FUNCTIONS DECLARATION */
@@ -77,8 +78,8 @@ class BST{
 
   /* OPERATOR OVERLOADING */
 
-  V& BST<K,V>::operator[](const K& key) noexcept{};
-  const V& BST<K,V>::operator[](const K& key) const{};
+  V& operator[](const K& key) noexcept{};
+  const V& operator[](const K& key) const{};
 
 };
 
