@@ -148,18 +148,19 @@ public:
 ////////////////////* BST FUNCTIONS */////////////////////////
 
 /* INSERT */
-/**
+
 template <typename K, typename V>
 void BST<K, V>::insert(const pair& p) {
   if(root==nullptr) {
     root.reset(new Node{nullptr, p});
   }
   else{
-    try{ insert_new(p, root.get());
+    try{ 
+      insert_new(p, root.get());
+    }
       catch (const Ovveride& s) {
         std::cerr << s.message << std::endl;
       }
-    }
   }
 }
 
