@@ -43,6 +43,11 @@ int main() {
   tree[16];
   std::cout << std::endl;
 
+// Clear
+
+  tree.clear();
+  std::cout << "Printing the content of the tree after clean()\n" << tree << std::endl;
+
   return 0;
   
 }

@@ -230,7 +230,7 @@ typename BST<K, V>::Iterator BST<K, V>:: find(const K key) noexcept{
 template <typename K, typename V>
 typename BST<K, V>::Node* BST<K, V>::get_min() const noexcept{
   if (root==nullptr){
-    std::cout <<"Tree is empty, there is no start." << std::endl;
+    std::cout <<"Tree is empty, there is no tree." << std::endl;
   return nullptr;
   }
 
