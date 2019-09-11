@@ -56,7 +56,7 @@ class BST{
   private:
 
     u_ptr root;
-    void balance(std::vector<std::pair<const K, V>>& aux, std::size_t left, std::size_t right) noexcept;
+    void balance_med(std::vector<std::pair<const K, V>>& vect, std::size_t left, std::size_t right) noexcept;
     void insert_new(const pair& p, Node* n);
     Node* get_min() const noexcept;
 
@@ -240,6 +240,35 @@ typename BST<K, V>::Node* BST<K, V>::get_min() const noexcept{
     current_node = current_node->left.get();
   }
   return current_node;
+}
+
+/* balance */
+template <typename K, typename V>
+void BST<K, V>:: balance() noexcept{
+
+  if (root == nullptr){
+    std::cout<<"Tree is empty. It is in balance by default"<<std::endl;
+    return;
+  }
+  std::vector<pair> vect;
+  Iterator i{begin()};
+  
+  for(; i != nullptr; ++i)
+    vect.push_back(*i);
+  clear();
+  balance_med(vect, 0, vect.size());
+}
+
+template <typename K, typename V>
+void BST<K, V>::balance_med(std::vector<pair>& vect, std::size_t left, std::size_t right) noexcept{
+
+  if(right-left < 1)
+    return;
+
+  auto med{(left+right)/2};
+  insert(vect[med]);
+  balance_med(vect, left, med);
+  balance_med(vect, med+1, right);
 }
 
 

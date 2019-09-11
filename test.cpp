@@ -51,12 +51,21 @@ int main() {
   tree[16];
   std::cout << std::endl;
 
+
+  std::cout << "|-------------------------------------------|" << std::endl;
+  std::cout << "| Testing balance()                         |" << std::endl;
+  std::cout << "|-------------------------------------------|" << std::endl;
+
+  tree.balance();
+  std::cout << "Printing the content of the tree after balance()\n" << tree << std::endl;
+
   std::cout << "|-------------------------------------------|" << std::endl;
   std::cout << "| Testing clear()                           |" << std::endl;
   std::cout << "|-------------------------------------------|" << std::endl;
 
   tree.clear();
   std::cout << "Printing the content of the tree after clean()\n" << tree << std::endl;
+
 
   return 0;
   
