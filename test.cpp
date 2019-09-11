@@ -4,7 +4,9 @@
 
 int main() {
 
-  // Tree creation and population
+  std::cout << "|-------------------------------------------|" << std::endl;
+  std::cout << "| Testing tree constructor and insert()     |" << std::endl;
+  std::cout << "|-------------------------------------------|" << std::endl;
 
   BST<int,int> tree{};
 
@@ -18,32 +20,40 @@ int main() {
   tree.insert({13, 1});
   tree.insert({4, 1});
 
-  // Printing
-
   std::cout << "Printing the content of the tree\n" << tree << std::endl;
 
-  // Insert and override
+  std::cout << "|-------------------------------------------|" << std::endl;
+  std::cout << "| Testing insert() over existing key        |" << std::endl;
+  std::cout << "|-------------------------------------------|" << std::endl;
 
   tree.insert({3, 10});
   std::cout << "Printing the content of the tree\n" << tree << std::endl;
 
-  // Find test
+  std::cout << "|-------------------------------------------|" << std::endl;
+  std::cout << "| Testing find()                            |" << std::endl;
+  std::cout << "|-------------------------------------------|" << std::endl;
 
   tree.find(7);
   tree.find(3);
   tree.find(8);
   tree.find(5);
-
   std::cout << std::endl;
 
-  // [] operator
+  std::cout << "|-------------------------------------------|" << std::endl;
+  std::cout << "| Testing [] operator over existing key     |" << std::endl;
+  std::cout << "|-------------------------------------------|" << std::endl;
 
   tree[14];
   std::cout << "\n";
+  std::cout << "|-------------------------------------------|" << std::endl;
+  std::cout << "| Testing [] operator over non-existing key |" << std::endl;
+  std::cout << "|-------------------------------------------|" << std::endl;
   tree[16];
   std::cout << std::endl;
 
-// Clear
+  std::cout << "|-------------------------------------------|" << std::endl;
+  std::cout << "| Testing clear()                           |" << std::endl;
+  std::cout << "|-------------------------------------------|" << std::endl;
 
   tree.clear();
   std::cout << "Printing the content of the tree after clean()\n" << tree << std::endl;
