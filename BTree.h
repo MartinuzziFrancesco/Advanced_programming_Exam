@@ -38,9 +38,12 @@ class BST{
     std::pair<const K,V> data;
 
     Node();
-    Node(Node* p, std::pair<const K, V>& d) : parent{p}, data{d}{
-    };
-
+    Node(Node* p, Node* l, Node* r, const std::pair<const K, V>& d) : 
+      parent{p}, 
+      data{d},
+      left{l},
+      right{r}
+    {};
     ~Node() noexcept = default;
 
   };
@@ -53,33 +56,34 @@ class BST{
   private:
 
     u_ptr root;
+    void balance(std::vector<std::pair<const K, V>>& aux, std::size_t left, std::size_t right) noexcept;
+    void insert_new(const pair& p, Node* n);
+    Node* get_min() const noexcept;
 
-    BST();
+  public:
+
+    /*constructor*/
+    BST() = default;
+    BST(const BST& bst);
     ~BST() noexcept = default;
 
-  /* ITERATORS CLASS DECLARATION */
+    /* ITERATORS CLASS DECLARATION */
+    class Iterator;
+    class Const_Iterator;
+    Iterator begin() noexcept { return Iterator{get_min()}; }
+    Iterator end() { return Iterator{nullptr}; }
+    Const_Iterator cbegin() noexcept {return Const_Iterator{get_min()};}
+    Const_Iterator cend() const { return Const_Iterator{nullptr}; }
 
-  class Iterator;
-  class Const_Iterator;
+    /* BST FUNCTIONS DECLARATION */
+    void insert(const pair& p);
+    void clear() noexcept;
+    Iterator find(const K k) noexcept;
+    void balance() noexcept;
 
-  Iterator begin() noexcept { return Iterator{get_min()}; }
-  Iterator end() { return Iterator{nullptr}; }
-
-  Const_Iterator cbegin() noexcept {return Const_Iterator{get_min()};}
-  Const_Iterator cend() const { return Const_Iterator{nullptr}; }
-
-  /* BST FUNCTIONS DECLARATION */
-
-  void insert(const pair& p);
-  void insert_new(const pair& p, Node* n);
-  void clear() noexcept;
-  Iterator find(const K k) const noexcept;
-  Node* get_min() const noexcept;
-
-  /* OPERATOR OVERLOADING */
-
-  V& operator[](const K& key) noexcept;
-  const V& operator[](const K& key) const;
+    /* OPERATOR OVERLOADING */
+    V& operator[](const K& key) noexcept;
+    const V& operator[](const K& key) const;
 
 };
 
@@ -88,7 +92,7 @@ class BST{
 /* ITERATOR */
 
 template <typename K, typename V> 
-class Iterator : public std::iterator<std::forward_iterator_tag, std::pair<const K,V>>{
+class BST<K,V>:: Iterator : public std::iterator<std::forward_iterator_tag, std::pair<const K,V>>{
 
   using pair = typename std::pair<const K,V>;
   using node = typename BST<K,V>::Node;
@@ -98,7 +102,6 @@ class Iterator : public std::iterator<std::forward_iterator_tag, std::pair<const
 public:
 
   Iterator(node* n) : pn{n} {}
-
   pair& operator*() const {return pn->data;}
 
   Iterator& operator++() {
@@ -117,7 +120,7 @@ public:
       }
       pn = p;
       return *this;
-	  }
+    }
   }
 
   bool operator==(const Iterator& other) { return pn == other.pn; }
@@ -128,7 +131,7 @@ public:
 /* CONST_ITERATOR */
 
 template <typename K, typename V>
-class Const_Iterator : public BST<K, V>::Iterator {
+class BST<K, V>:: Const_Iterator : public BST<K, V>::Iterator {
 
 public:
   
@@ -150,9 +153,9 @@ public:
 /* INSERT */
 
 template <typename K, typename V>
-void BST<K, V>::insert(const pair& p) {
+void BST<K, V>:: insert(const pair& p) {
   if(root==nullptr) {
-    root.reset(new Node{nullptr, p});
+    root.reset(new Node{nullptr, nullptr, nullptr, p});
   }
   else{
     try{ 
@@ -170,16 +173,20 @@ template <typename K, typename V>
 void BST<K, V>::insert_new(const pair& p, Node* n){
   if(p.first < n->data.first) {
     if(n->left==nullptr){
-      n->left.reset(new Node{n, p});
-    } else n = n->left.get();
+      n->left.reset(new Node{n, nullptr, nullptr, p});
+    } 
+    else n = n->left.get();
   }
+
   else if(p.first > n->data.first) {
     if(n->right==nullptr){
-      n->right.reset(new Node{n, p});
-    } else n = n->right.get();
+      n->right.reset(new Node{n, nullptr, nullptr, p});
+    } 
+    else n = n->right.get();
   }
-  else if (p.first ==n->pair.first) {
-    throw Ovveride{"You are trying to override an existing key"};
+
+  else if (p.first == n->data.first) {
+    n->data.second = p.second;
     return;
   }
   insert_new(p, n);
@@ -196,18 +203,22 @@ void BST<K, V>::clear() noexcept {
 /* FIND */
 
 template <typename K, typename V>
-typename BST<K, V>::Iterator BST<K, V>::find(const K key) const noexcept{
+typename BST<K, V>::Iterator BST<K, V>:: find(const K key) noexcept{
   
   Node* current_node{root.get()};
 
   while(current_node){
+
     K current_key = current_node->data.first;
-    if(current_key == key) return Iterator{current_node};
+
+    if(current_key == key){ 
+      return Iterator{current_node};
+    }
     else if(current_key < key ){ 
-      current_node = current_node->left.get();
+      current_node = current_node->right.get();
     }
     else if(current_key > key ){ 
-      current_node = current_node->right.get();
+      current_node = current_node->left.get();
     }
   }
   std::cout << "Key:" << key << " not found" << std::endl;
@@ -219,15 +230,19 @@ typename BST<K, V>::Iterator BST<K, V>::find(const K key) const noexcept{
 template <typename K, typename V>
 typename BST<K, V>::Node* BST<K, V>::get_min() const noexcept{
   if (root==nullptr){
-    throw Empty{"Tree is empty, there is no start."};
+    std::cout <<"Tree is empty, there is no start." << std::endl;
   return nullptr;
   }
+
   Node* current_node{root.get()};
+
   while(current_node->left.get()){
     current_node = current_node->left.get();
   }
   return current_node;
 }
+
+
 
 //////////////////////* OPERATOR OVERLOADING *//////////////////////////
 
@@ -235,29 +250,41 @@ typename BST<K, V>::Node* BST<K, V>::get_min() const noexcept{
 
 template<typename K, typename V>
 V& BST<K,V>::operator[](const K& key) noexcept {
+
   Iterator i = find(key);
-  if (i != end()) {return (*i).second;}
+
+  if (i != end()) {
+    std::cout << "Key: " << key <<" has value: " << (*i).second << std::endl;
+    return (*i).second;
+  }
+
+  std::cout << "Allocating a new node with key: " << key <<" and value {}" << std::endl;
   insert(pair{key, V{}});
   std::cout << "A new key has been inserted." << std::endl;
+  i = find(key);
+  std::cout << "Key " << key <<" has value: " << (*i).second << std::endl; 
+  return (*i).second;
 }
 
 /* CONST_OPERATOR[] */
 
 template<typename K, typename V>
 const V& BST<K,V>::operator[](const K& key) const {
-  Iterator i = find(key);
-  if (i != end()) {return (*i).second;}
-  throw Not_Exist{"const operator[] trying to access a non existing key."};
+
+  Const_Iterator i = find(key);
+
+  if (i != end()) 
+    return (*i).second; 
+  throw 
+    std::runtime_error("const operator[] trying to access a non existing key.");
 }
 
+/**operator <<**/
 
-/*
-insert, used to insert a new pair key-value.                                                                      V (not tested)
-clear(), clear the content of the tree.                                                                           V (not tested)
-begin(), return an iterator to the first node (which likely will not be the root node)                            V (not tested)
-end(), return a proper iterator                                                                                   V (not tested)
-cbegin(), return a const_iterator to the first node                                                               V (not tested)
-cend(), return a proper const_iterator                                                                            V (not tested)
-balance(), balance the tree.
-find, find a given key and return an iterator to that node. If the key is not found returns end();                V (not tested)
-*/
+template <typename K, typename V>
+std::ostream& operator<<(std::ostream& os, BST<K, V>& bst) {
+  for (const auto &x : bst)             
+    os << x.first << ": " << x.second << std::endl;
+  return os;
+}
+
