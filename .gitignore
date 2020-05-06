@@ -38,3 +38,6 @@ Thumbs.db
 # Extra #
 *.xml
 .vscode
+./python/.idea
+./python/*.ipynb
+./python/.ipnb*
