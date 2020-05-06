@@ -12,4 +12,3 @@ date:2008-01-31; from:Sleepy; to:SnowWhite;
 date:2015-10-23; from:Doc; to:SnowWhite;
 date:2014-03-22; from:Sleepy; to:Mickey;
 date:2015-08-01; from:Sleepy; to:Grumpy;
-date:2014-04-21; from:Peter; to:Dewey;

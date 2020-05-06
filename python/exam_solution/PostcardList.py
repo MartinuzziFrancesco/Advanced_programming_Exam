@@ -1,3 +1,4 @@
+import re
 from datetime import date
 
 
@@ -32,24 +33,15 @@ class PostcardList:
 
     def parsePostcards(self):  # parse self._postcards, set self.{_date,_from,_to}
         for postcard in self._postcards[-self._unparsed:]:
-            d, f, t = postcard.split()
-            d = d[5:-1]
-            f = f[5:-1]
-            t = t[3:-1]
-            if d in self._date:
-                self._date[d].append(self._postcards.index(postcard))
-            else:
-                self._date[d] = [self._postcards.index(postcard)]
+            pattern = ['date', 'to', 'from']
+            d, f, t = [re.search('{}:(.+?);'.format(p), postcard).group(1) for p in pattern]
 
-            if f in self._from:
-                self._from[f].append(self._postcards.index(postcard))
-            else:
-                self._from[f] = [self._postcards.index(postcard)]
+            for var, attr in zip([d, f, t], [self._date, self._to, self._from]):
+                if var in attr:
+                    attr[var].append(self._postcards.index(postcard))
+                else:
+                    attr[var] = [self._postcards.index(postcard)]
 
-            if t in self._to:
-                self._to[t].append(self._postcards.index(postcard))
-            else:
-                self._to[t] = [self._postcards.index(postcard)]
         self._unparsed = 0
 
     def updateFile(self, _date, _from, _to):  # write self.{_date,_from,_to} to self._file
