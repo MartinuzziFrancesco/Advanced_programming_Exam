@@ -65,10 +65,25 @@ class PostcardList:
         return len(self._postcards)
 
     def getPostcardsByDateRange(self, date_range):
-        pass
+        date_range_postcards = []
+        for date in self._date:
+            if date_range[0].date() <= date <= date_range[1].date():
+                for j in self._date[date]:
+                    date_range_postcards.append(self._postcards[j])
+        return date_range_postcards
 
     def getPostcardsBySender(self, sender):
-        pass
-
+        sender_postcards = []
+        if sender in self._from:
+            for i in self._from[sender]:
+                sender_postcards.append(self._postcards[i])
+        return sender_postcards
+    
+    
     def getPostcardsByReceiver(self, receiver):
-        pass
+        receiver_postcards = []
+        if receiver in self._to:
+            for i in self._to[receiver]:
+                receiver_postcards.append(self._postcards[i])
+        return receiver_postcards
+                
