@@ -59,6 +59,7 @@ class BST{
     void balance_med(std::vector<std::pair<const K, V>>& vect, std::size_t left, std::size_t right) noexcept;
     void insert_new(const pair& p, Node* n);
     Node* get_min() const noexcept;
+    void copy_new(Node* old_one, std::unique_ptr<Node>& new_one) noexcept;
 
   public:
 
@@ -66,6 +67,13 @@ class BST{
     BST() = default;
     BST(const BST& bst);
     ~BST() noexcept = default;
+
+    BST& operator=(const BST& bst);
+    BST(BST&& bst) noexcept : root{std::move(bst.root)}{};
+    BST& operator=(const BST bst) noexcept{
+      root = std::move(bst.root);
+      return *this;
+    }
 
     /* ITERATORS CLASS DECLARATION */
     class Iterator;
@@ -316,4 +324,44 @@ std::ostream& operator<<(std::ostream& os, BST<K, V>& bst) {
     os << x.first << ": " << x.second << std::endl;
   return os;
 }
+
+
+
+////////////////////* COPY AND MOVE *//////////////////////
+/* copy */
+template <typename K, typename V>
+BST<K, V>::BST(const BST& bst){
+  if (bst.root != nullptr){
+    root.reset(new Node{nullptr, bst->pair, nullptr, nullptr});
+    copy_new(bst.root.get(), root);
+  }
+}
+
+
+template <typename K, typename V>
+void BST<K, V>::copy_new(Node* old_one, std::unique_ptr<Node>& new_one) noexcept {
+  if(old_one->left != nullptr){
+    new_one->left.reset(new Node{new_one.get(), old_one->left->pair, nullptr, nullptr});
+    copy_new(old_one->left.get(), new_one->left);
+  }
+  if(old_one->right != nullptr){
+    new_one->right.reset(new Node{new_one.get(), old_one->right->pair, nullptr, nullptr});
+    copy_new(old_one->right.get(), new_one->right);
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
