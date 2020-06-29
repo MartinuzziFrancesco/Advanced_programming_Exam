@@ -1,4 +1,4 @@
-SRC = BTree.cpp     \
+SRC = BTree.h     \
 
 CXX = c++
 CXXFLAGS = -Wall -Wextra -g -std=c++11

@@ -8,9 +8,9 @@
 
 /* ERROR HANDLING STRUCT */
 
-struct Ovveride {
+struct Override {
   std::string message;
-  Ovveride(const std::string& s) : message{s} {}
+  Override(const std::string& s) : message{s} {}
 };
 
 struct Empty {
@@ -27,7 +27,8 @@ struct Not_Exist {
 
 template <typename K, typename V>
 class BST{
-
+    
+  using pair = std::pair<const K, V>;
   /* NODE STRUCT */
 
   struct Node{
@@ -35,10 +36,10 @@ class BST{
     std::unique_ptr<Node> left;
     std::unique_ptr<Node> right;
     Node* parent;
-    std::pair<const K,V> data;
+    pair data;
 
-    Node();
-    Node(Node* p, Node* l, Node* r, const std::pair<const K, V>& d) : 
+    Node() noexcept;
+    Node(Node* p, Node* l, Node* r, const pair& d) noexcept: 
       parent{p}, 
       data{d},
       left{l},
@@ -48,25 +49,19 @@ class BST{
 
   };
 
-  public:
+  using u_ptr = std::unique_ptr<Node>;
+  u_ptr root;
 
-    using u_ptr = std::unique_ptr<Node>;
-    using pair = std::pair<const K, V>;
-
-  private:
-
-    u_ptr root;
-
-    void balance_med(std::vector<pair>& vect, std::size_t left, std::size_t right) noexcept;
-    void insert_new(const pair& p, Node* n);
-    Node* get_min() const noexcept;
-    void copy_new(Node* old_one, u_ptr& new_one) noexcept;
+  void balance_med(std::vector<pair>& vect, std::size_t left, std::size_t right) noexcept;
+  void insert_new(const pair& p, Node* n);
+  Node* get_min() const noexcept;
+  void copy_new(Node* old_one, u_ptr& new_one) noexcept;
 
   public:
 
     /*constructor*/
     BST() = default;
-    BST(const BST& bst);
+    BST(const BST& bst) noexcept;
     ~BST() noexcept = default;
 
     BST& operator=(const BST& bst);
@@ -141,12 +136,12 @@ public:
 
 template <typename K, typename V>
 class BST<K, V>::Const_Iterator : public BST<K, V>::Iterator {
-
-public:
-  
+    
   using parent = typename BST<K, V>::Iterator;
   using pair = typename std::pair<const K,V>;
   using node = typename BST<K,V>::Node;
+  
+public:
 
   using parent::Iterator;
   using parent::operator++;
@@ -170,7 +165,7 @@ void BST<K, V>:: insert(const pair& p) {
     try{ 
       insert_new(p, root.get());
     }
-      catch (const Ovveride& s) {
+      catch (const Override& s) {
         std::cerr << s.message << std::endl;
       }
   }
@@ -183,6 +178,7 @@ void BST<K, V>::insert_new(const pair& p, Node* n) {
   if(p.first < n->data.first) {
     if(n->left==nullptr){
       n->left.reset(new Node{n, nullptr, nullptr, p});
+      return;
     } 
     else n = n->left.get();
   }
@@ -190,12 +186,13 @@ void BST<K, V>::insert_new(const pair& p, Node* n) {
   else if(p.first > n->data.first) {
     if(n->right==nullptr){
       n->right.reset(new Node{n, nullptr, nullptr, p});
+      return;
     } 
     else n = n->right.get();
   }
 
   else if (p.first == n->data.first) {
-    n->data.second = p.second;
+    throw Override("You are trying to override an existing pair");
     return;
   }
   insert_new(p, n);
@@ -328,7 +325,7 @@ std::ostream& operator<<(std::ostream& os, BST<K, V>& bst) noexcept {
 
 
 
-////////////////////* COPY AND MOVE *//////////////////////
+////////////////////* COPY*//////////////////////
 /* copy */
 template <typename K, typename V>
 BST<K, V>::BST(const BST& bst) noexcept {
@@ -350,19 +347,3 @@ void BST<K, V>::copy_new(Node* old_one, std::unique_ptr<Node>& new_one) noexcept
     copy_new(old_one->right.get(), new_one->right);
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
