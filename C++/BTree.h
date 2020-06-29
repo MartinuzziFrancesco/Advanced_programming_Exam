@@ -56,10 +56,11 @@ class BST{
   private:
 
     u_ptr root;
-    void balance_med(std::vector<std::pair<const K, V>>& vect, std::size_t left, std::size_t right) noexcept;
+
+    void balance_med(std::vector<pair>& vect, std::size_t left, std::size_t right) noexcept;
     void insert_new(const pair& p, Node* n);
     Node* get_min() const noexcept;
-    void copy_new(Node* old_one, std::unique_ptr<Node>& new_one) noexcept;
+    void copy_new(Node* old_one, u_ptr& new_one) noexcept;
 
   public:
 
@@ -78,15 +79,15 @@ class BST{
     /* ITERATORS CLASS DECLARATION */
     class Iterator;
     class Const_Iterator;
-    Iterator begin() noexcept { return Iterator{get_min()}; }
-    Iterator end() { return Iterator{nullptr}; }
-    Const_Iterator cbegin() noexcept {return Const_Iterator{get_min()};}
-    Const_Iterator cend() const { return Const_Iterator{nullptr}; }
+    Iterator begin() const noexcept { return Iterator{get_min()}; }
+    Iterator end() const noexcept { return Iterator{nullptr}; }
+    Const_Iterator cbegin() const noexcept {return Const_Iterator{get_min()};}
+    Const_Iterator cend() const noexcept { return Const_Iterator{nullptr}; }
 
     /* BST FUNCTIONS DECLARATION */
     void insert(const pair& p);
     void clear() noexcept;
-    Iterator find(const K k) noexcept;
+    Iterator find(const K k) const noexcept;
     void balance() noexcept;
 
     /* OPERATOR OVERLOADING */
@@ -100,7 +101,7 @@ class BST{
 /* ITERATOR */
 
 template <typename K, typename V> 
-class BST<K,V>:: Iterator : public std::iterator<std::forward_iterator_tag, std::pair<const K,V>>{
+class BST<K,V>::Iterator : public std::iterator<std::forward_iterator_tag, std::pair<const K,V>>{
 
   using pair = typename std::pair<const K,V>;
   using node = typename BST<K,V>::Node;
@@ -110,9 +111,9 @@ class BST<K,V>:: Iterator : public std::iterator<std::forward_iterator_tag, std:
 public:
 
   Iterator(node* n) : pn{n} {}
-  pair& operator*() const {return pn->data;}
+  pair& operator*() const noexcept {return pn->data;}
 
-  Iterator& operator++() {
+  Iterator& operator++() noexcept{
     if (pn->right != nullptr) {
       pn = pn->right.get();
       while (pn->left.get()) {
@@ -131,15 +132,15 @@ public:
     }
   }
 
-  bool operator==(const Iterator& other) { return pn == other.pn; }
-  bool operator!=(const Iterator& other) { return !(*this == other); }
+  bool operator==(const Iterator& other) const noexcept { return pn == other.pn; }
+  bool operator!=(const Iterator& other) const noexcept { return !(*this == other); }
 
 };
 
 /* CONST_ITERATOR */
 
 template <typename K, typename V>
-class BST<K, V>:: Const_Iterator : public BST<K, V>::Iterator {
+class BST<K, V>::Const_Iterator : public BST<K, V>::Iterator {
 
 public:
   
@@ -152,7 +153,7 @@ public:
   using parent::operator!=;
   using parent::operator==;
 
-  const pair& operator*() const { return parent::operator*(); }
+  const pair& operator*() const noexcept { return parent::operator*(); }
 
 };
 
@@ -178,7 +179,7 @@ void BST<K, V>:: insert(const pair& p) {
 /* INSERT_NEW */
 
 template <typename K, typename V>   
-void BST<K, V>::insert_new(const pair& p, Node* n){
+void BST<K, V>::insert_new(const pair& p, Node* n) {
   if(p.first < n->data.first) {
     if(n->left==nullptr){
       n->left.reset(new Node{n, nullptr, nullptr, p});
@@ -211,7 +212,7 @@ void BST<K, V>::clear() noexcept {
 /* FIND */
 
 template <typename K, typename V>
-typename BST<K, V>::Iterator BST<K, V>:: find(const K key) noexcept{
+typename BST<K, V>::Iterator BST<K, V>:: find(const K key) const noexcept{
   
   Node* current_node{root.get()};
 
@@ -286,7 +287,7 @@ void BST<K, V>::balance_med(std::vector<pair>& vect, std::size_t left, std::size
 /* OPERATOR[] */
 
 template<typename K, typename V>
-V& BST<K,V>::operator[](const K& key) noexcept {
+V& BST<K,V>::operator[](const K& key)noexcept {
 
   Iterator i = find(key);
 
@@ -319,7 +320,7 @@ const V& BST<K,V>::operator[](const K& key) const {
 /**operator <<**/
 
 template <typename K, typename V>
-std::ostream& operator<<(std::ostream& os, BST<K, V>& bst) {
+std::ostream& operator<<(std::ostream& os, BST<K, V>& bst) noexcept {
   for (const auto &x : bst)             
     os << x.first << ": " << x.second << std::endl;
   return os;
@@ -330,7 +331,7 @@ std::ostream& operator<<(std::ostream& os, BST<K, V>& bst) {
 ////////////////////* COPY AND MOVE *//////////////////////
 /* copy */
 template <typename K, typename V>
-BST<K, V>::BST(const BST& bst){
+BST<K, V>::BST(const BST& bst) noexcept {
   if (bst.root != nullptr){
     root.reset(new Node{nullptr, bst->pair, nullptr, nullptr});
     copy_new(bst.root.get(), root);

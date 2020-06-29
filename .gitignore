@@ -41,3 +41,4 @@ Thumbs.db
 ./python/.idea/*
 *.ipynb
 ./python/.ipnb*/*
+*.ini
