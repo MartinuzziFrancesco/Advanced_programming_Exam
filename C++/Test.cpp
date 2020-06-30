@@ -59,13 +59,59 @@ int main() {
   tree.balance();
   std::cout << "Printing the content of the tree after balance()\n" << tree << std::endl;
 
+
+
+  std::cout << "|-------------------------------------------|" << std::endl;
+  std::cout << "| Testing copy semantics                    |" << std::endl;
+  std::cout << "|-------------------------------------------|" << std::endl;
+
+  BST<int,int> tree_1{tree};
+  std::cout << "tree[8]" << std::endl;
+  tree[8];
+  std::cout << "tree_1[8]:" << std::endl;
+  tree_1[8];
+  std::cout << "tree_1 inserting key 11...";
+  tree_1.insert({11, 11});
+  std::cout << "\t...done" << std::endl;
+  std::cout << "tree_1[11]:" << std::endl;
+  tree_1[11];
+  std::cout << "tree.find(11):" << std::endl;
+  tree.find(11);
+
+  BST<int,int> tree_2=tree;
+  std::cout << "tree[8]:" << std::endl;
+  tree[8];
+  std::cout << "tree_2[8]:" << std::endl;
+  tree_2[8];
+  std::cout << "tree_2 inserting key 22...";
+  tree_2.insert({22, 22});
+  std::cout << "\t...done" << std::endl;
+  std::cout << "tree_2[22]:" << std::endl;
+  tree_2[22];
+  std::cout << "tree.find(22):" << std::endl;
+  tree.find(22);
+
+  std::cout << "|-------------------------------------------|" << std::endl;
+  std::cout << "| Testing move semantics                    |" << std::endl;
+  std::cout << "|-------------------------------------------|" << std::endl;
+
+  BST<int, int> tree_3(std::move(tree));
+  std::cout << "Printing the content of the tree after move()\n" << tree << std::endl;;
+
+  std::cout << "tree_3[8]:" << std::endl;
+  tree_3[8];
+
+
+
   std::cout << "|-------------------------------------------|" << std::endl;
   std::cout << "| Testing clear()                           |" << std::endl;
   std::cout << "|-------------------------------------------|" << std::endl;
 
   tree.clear();
-  std::cout << "Printing the content of the tree after clean()\n" << tree << std::endl;
+  tree_1.clear();
+  tree_2.clear();
 
+  std::cout << "Printing the content of the tree after clean()\n" << tree << std::endl;
 
   return 0;
   

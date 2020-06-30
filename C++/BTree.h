@@ -42,7 +42,7 @@ class BST{
     Node(Node* p, Node* l, Node* r, const pair& d) noexcept: 
       parent{p},
       left{l},
-      right{r},
+      right{r}, 
       data{d}
     {};
     ~Node() noexcept = default;
@@ -330,7 +330,7 @@ std::ostream& operator<<(std::ostream& os, BST<K, V>& bst) noexcept {
 template <typename K, typename V>
 BST<K, V>::BST(const BST& bst) noexcept {
   if (bst.root != nullptr){
-    root.reset(new Node{nullptr, bst->pair, nullptr, nullptr});
+    root.reset(new Node{nullptr, nullptr, nullptr, bst.root.get()->data});
     copy_new(bst.root.get(), root);
   }
 }
@@ -339,11 +339,11 @@ BST<K, V>::BST(const BST& bst) noexcept {
 template <typename K, typename V>
 void BST<K, V>::copy_new(Node* old_one, std::unique_ptr<Node>& new_one) noexcept {
   if(old_one->left != nullptr){
-    new_one->left.reset(new Node{new_one.get(), old_one->left->pair, nullptr, nullptr});
+    new_one->left.reset(new Node{new_one.get(), nullptr, nullptr, old_one->left->data});
     copy_new(old_one->left.get(), new_one->left);
   }
   if(old_one->right != nullptr){
-    new_one->right.reset(new Node{new_one.get(), old_one->right->pair, nullptr, nullptr});
+    new_one->right.reset(new Node{new_one.get(), nullptr, nullptr, old_one->right->data});
     copy_new(old_one->right.get(), new_one->right);
   }
 }
