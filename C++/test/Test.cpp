@@ -1,4 +1,4 @@
-#include "BTree.h"
+#include "../include/BTree.h"
 #include <iostream>
 
 

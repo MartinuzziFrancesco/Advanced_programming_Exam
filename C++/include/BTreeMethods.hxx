@@ -1,150 +1,22 @@
-#include <iostream>
-#include <utility>
-#include <iterator>
-#include <vector> 
-#include <memory>
+/**
+ * @file BTreeMethods.h
+ * @author Francesco Martinuzzi, Marco Alberto Grimaldi
+ * @brief Header containing methods of BST class.
+ */
 
-////////////////////* CLASS AND STRUCT */////////////////////
-
-/* ERROR HANDLING STRUCT */
-
-struct Override {
-  std::string message;
-  Override(const std::string& s) : message{s} {}
-};
-
-/* BST CLASS */
+#include "BTree.h"
 
 template <typename K, typename V>
-class BST{
-    
-  using pair = std::pair<const K, V>;
-  /* NODE STRUCT */
-
-  struct Node{
-
-    Node* parent;
-    std::unique_ptr<Node> left;
-    std::unique_ptr<Node> right;
-    pair data;
-
-    Node() noexcept;
-    Node(Node* p, Node* l, Node* r, const pair& d) noexcept: 
-      parent{p},
-      left{l},
-      right{r}, 
-      data{d}
-    {};
-    ~Node() noexcept = default;
-
-  };
-
-  using u_ptr = std::unique_ptr<Node>;
-  u_ptr root;
-
-  void balance_med(std::vector<pair>& vect, std::size_t left, std::size_t right) noexcept;
-  void insert_new(const pair& p, Node* n);
-  Node* get_min() const noexcept;
-  void copy_new(Node* old_one, u_ptr& new_one) noexcept;
-
-  public:
-
-    /*constructor*/
-    BST() = default;
-    BST(const BST& bst) noexcept;
-    ~BST() noexcept = default;
-
-    BST& operator=(const BST& bst);
-    BST(BST&& bst) noexcept : root{std::move(bst.root)}{};
-    BST& operator=(const BST bst) noexcept{
-      root = std::move(bst.root);
-      return *this;
-    }
-
-    /* ITERATORS CLASS DECLARATION */
-    class Iterator;
-    class Const_Iterator;
-    Iterator begin() const noexcept { return Iterator{get_min()}; }
-    Iterator end() const noexcept { return Iterator{nullptr}; }
-    Const_Iterator cbegin() const noexcept {return Const_Iterator{get_min()};}
-    Const_Iterator cend() const noexcept { return Const_Iterator{nullptr}; }
-
-    /* BST FUNCTIONS DECLARATION */
-    void insert(const pair& p);
-    void clear() noexcept;
-    Iterator find(const K k) const noexcept;
-    void balance() noexcept;
-
-    /* OPERATOR OVERLOADING */
-    V& operator[](const K& key) noexcept;
-    const V& operator[](const K& key) const;
-
-};
-
-////////////////////* ITERATORS */////////////////////////
-
-/* ITERATOR */
-
-template <typename K, typename V> 
-class BST<K,V>::Iterator : public std::iterator<std::forward_iterator_tag, std::pair<const K,V>>{
-
-  using pair = typename std::pair<const K,V>;
-  using node = typename BST<K,V>::Node;
-
-  node* pn;
-
-public:
-
-  Iterator(node* n) : pn{n} {}
-  pair& operator*() const noexcept {return pn->data;}
-
-  Iterator& operator++() noexcept{
-    if (pn->right != nullptr) {
-      pn = pn->right.get();
-      while (pn->left.get()) {
-        pn = pn->left.get();
-      }
-      return *this;
-    }
-    else {
-      node* p = pn->parent;
-      while (p != nullptr && pn == p->right.get()) {
-        pn = p;
-        p = p->parent;
-      }
-      pn = p;
-      return *this;
-    }
-  }
-
-  bool operator==(const Iterator& other) const noexcept { return pn == other.pn; }
-  bool operator!=(const Iterator& other) const noexcept { return !(*this == other); }
-
-};
-
-/* CONST_ITERATOR */
+typename BST<K, V>::Iterator BST<K, V>:: begin() const noexcept { return Iterator{get_min()}; }
 
 template <typename K, typename V>
-class BST<K, V>::Const_Iterator : public BST<K, V>::Iterator {
-    
-  using parent = typename BST<K, V>::Iterator;
-  using pair = typename std::pair<const K,V>;
-  using node = typename BST<K,V>::Node;
-  
-public:
+typename BST<K, V>::Iterator BST<K, V>:: end() const noexcept { return Iterator{nullptr}; }
 
-  using parent::Iterator;
-  using parent::operator++;
-  using parent::operator!=;
-  using parent::operator==;
+template <typename K, typename V>
+typename BST<K, V>::Const_Iterator BST<K, V>:: cbegin() const noexcept {return Const_Iterator{get_min()};}
 
-  const pair& operator*() const noexcept { return parent::operator*(); }
-
-};
-
-////////////////////* BST FUNCTIONS */////////////////////////
-
-/* INSERT */
+template <typename K, typename V>
+typename BST<K, V>::Const_Iterator BST<K, V>::cend() const noexcept { return Const_Iterator{nullptr}; }
 
 template <typename K, typename V>
 void BST<K, V>:: insert(const pair& p) {
@@ -160,8 +32,6 @@ void BST<K, V>:: insert(const pair& p) {
       }
   }
 }
-
-/* INSERT_NEW */
 
 template <typename K, typename V>   
 void BST<K, V>::insert_new(const pair& p, Node* n) {
@@ -188,15 +58,11 @@ void BST<K, V>::insert_new(const pair& p, Node* n) {
   insert_new(p, n);
 }
 
-/* CLEAR */
-
 template <typename K, typename V> 
 void BST<K, V>::clear() noexcept {
   root.reset();
   std::cout << "Tree has been cleared" << std::endl;
 }
-
-/* FIND */
 
 template <typename K, typename V>
 typename BST<K, V>::Iterator BST<K, V>:: find(const K key) const noexcept{
@@ -221,8 +87,6 @@ typename BST<K, V>::Iterator BST<K, V>:: find(const K key) const noexcept{
   return end();
 }
 
-/* GET_MIN*/
-
 template <typename K, typename V>
 typename BST<K, V>::Node* BST<K, V>::get_min() const noexcept{
   if (root==nullptr){
@@ -238,7 +102,6 @@ typename BST<K, V>::Node* BST<K, V>::get_min() const noexcept{
   return current_node;
 }
 
-/* balance */
 template <typename K, typename V>
 void BST<K, V>:: balance() noexcept{
 
@@ -336,4 +199,14 @@ void BST<K, V>::copy_new(Node* old_one, std::unique_ptr<Node>& new_one) noexcept
     new_one->right.reset(new Node{new_one.get(), nullptr, nullptr, old_one->right->data});
     copy_new(old_one->right.get(), new_one->right);
   }
+} 
+
+template <typename K, typename V>
+BST<K, V>::BST(BST&& bst) : root{std::move(bst.root)}{}
+
+template <typename K, typename V>
+BST<K, V>& BST<K, V>::operator=(const BST& bst) noexcept{
+  root = std::move(bst.root);
+  return *this;
 }
+

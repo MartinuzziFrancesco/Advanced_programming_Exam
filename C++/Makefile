@@ -1,7 +1,7 @@
 CXX = c++
 CXXFLAGS = -Wall -Wextra -g -std=c++11
-DEPS = BTree.h
-OBJ = Test.o BTree.h
+DEPS = include/BTree.h
+OBJ = test/Test.o include/BTree.h
 
 %.o: %.cpp $(DEPS)
 	$(CXX) -c -o $@ $< $(CXXFLAGS)
@@ -12,4 +12,4 @@ Test: $(OBJ)
 .PHONY: clean
 
 clean:
-	rm -f Test.o Test
+	rm -f test/Test.o Test
