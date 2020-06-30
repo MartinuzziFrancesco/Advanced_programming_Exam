@@ -39,7 +39,8 @@ Thumbs.db
 # Extra #
 *.xml
 C++/.vscode/*
-./python/.idea/*
+./Python/.idea/
 *.ipynb
-./python/.ipnb*/*
+./Python/.ipnb*/*
 *.ini
+.vscode/

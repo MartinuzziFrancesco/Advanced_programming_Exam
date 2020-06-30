@@ -13,16 +13,6 @@ struct Override {
   Override(const std::string& s) : message{s} {}
 };
 
-struct Empty {
-  std::string message;
-  Empty(const std::string& s) : message{s} {}
-};
-
-struct Not_Exist {
-  std::string message;
-  Not_Exist(const std::string& s) : message{s} {}
-};
-
 /* BST CLASS */
 
 template <typename K, typename V>
