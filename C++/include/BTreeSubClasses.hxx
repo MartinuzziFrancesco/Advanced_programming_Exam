@@ -22,10 +22,13 @@ template <typename K, typename V>
 struct BST<K, V>::Node{
     /** Parent node*/
     Node* parent;
+
     /**Left child node, with the smallest key*/
     std::unique_ptr<Node> left;
+
     /**Right child node, with the greater key*/
     std::unique_ptr<Node> right;
+
     /** The data in the node is stored in key-value format. 
      * The key is assumed constant to ensure consistency.
      */
@@ -35,6 +38,7 @@ struct BST<K, V>::Node{
     * @brief Default constructor of a Node
     */
     Node() noexcept;
+
     /**
     * @brief Constructor of a Node.
     * @param d The data to be inserted into the node.
@@ -48,6 +52,7 @@ struct BST<K, V>::Node{
       right{r}, 
       data{d}
     {};
+
     /**
     * @brief Default destructor of a Node.
     */
@@ -62,8 +67,10 @@ class BST<K,V>::Iterator : public std::iterator<std::forward_iterator_tag, std::
 
   /** Alias used for better code readability*/
   using pair = typename std::pair<const K,V>;
+
   /** Alias used for better code readability*/
   using node = typename BST<K,V>::Node;
+
   /** Node referred to by the iterator */
   node* pn;
 
@@ -73,11 +80,13 @@ public:
   * @param n The node on which the iterator is constructed.
   */
   Iterator(node* n) : pn{n} {}
+
   /**
   * @brief Overload of operator () for deferencing an iterator on a binary search tree
   * @return Reference to the data in the node, in key/value format.
   */
   pair& operator*() const noexcept {return pn->data;}
+
   /**
   * @brief Overload of operator ++ to advance the iterator to next node.
   * @return Reference to an iterator pointing the following node.
@@ -107,6 +116,7 @@ public:
   * @return Bool true if the iterators point to the same node, false otherwise.
   */
   bool operator==(const Iterator& other) const noexcept { return pn == other.pn; }
+
   /**
   * @brief Overload of operator != to check inequality of operators.
   * @param other The operator to compare to the current one.
@@ -132,10 +142,14 @@ class BST<K, V>::Const_Iterator : public BST<K, V>::Iterator {
 public:
   /** Inheritance of methods*/
   using parent::Iterator;
+
   /** Inheritance of methods*/
-  using parent::operator++;  //servono?
+
+  using parent::operator++;
   /** Inheritance of methods*/
+
   using parent::operator!=;
+  
   /** Inheritance of methods*/
   using parent::operator==;
 
