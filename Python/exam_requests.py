@@ -38,22 +38,7 @@ Note that the names and arguments of the functions are fixed as follows:
 
 import unittest
 import datetime  # use this module to deal with dates:  https://docs.python.org/3/library/datetime.html
-
-
-class PostcardList:
-    ########################
-    # define attributes here
-    pass
-    ########################
-
-
-########################
-# TO COMMENT
-from exam_solution import PostcardList  # overrides the class define above
-
-
-########################
-
+from PostcardList import PostcardList  # overrides the class define above
 
 class Test(unittest.TestCase):
 
