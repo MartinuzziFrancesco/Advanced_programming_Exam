@@ -33,17 +33,17 @@ class BST{
 
   struct Node{
 
+    Node* parent;
     std::unique_ptr<Node> left;
     std::unique_ptr<Node> right;
-    Node* parent;
     pair data;
 
     Node() noexcept;
     Node(Node* p, Node* l, Node* r, const pair& d) noexcept: 
-      parent{p}, 
-      data{d},
+      parent{p},
       left{l},
-      right{r}
+      right{r},
+      data{d}
     {};
     ~Node() noexcept = default;
 
