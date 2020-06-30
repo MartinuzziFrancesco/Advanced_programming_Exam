@@ -1,15 +1,26 @@
 CXX = c++
-CXXFLAGS = -Wall -Wextra -g -std=c++11
-DEPS = include/BTree.h
-OBJ = test/Test.o include/BTree.h
+CXXFLAGS = -std=c++11 -Wall -Wextra
+TEST = tests
+BCMK = benchmark
+TESTSRC = test/Test.cpp
+BCMKSRC = test/Benchmark.cpp
+IFLAGS = -I include
+DEFINES = NONE
+DFLAGS = -D $(DEFINES)
 
-%.o: %.cpp $(DEPS)
-	$(CXX) -c -o $@ $< $(CXXFLAGS)
+all: $(TEST) $(BCMK) docs
 
-Test: $(OBJ)
-	$(CXX) -o $@ $< $(CXXFLAGS)
+docs: 
+	doxygen dconfig
 
-.PHONY: clean
+
+$(TEST): $(TESTSRC)
+	$(CXX) -g $< -o $(TEST) $(CXXFLAGS) $(IFLAGS) $(DFLAGS)
+
+$(BCMK): $(BCMKSRC)
+	$(CXX) -g $< -o $(BCMK) $(CXXFLAGS) $(IFLAGS) $(DFLAGS)
 
 clean:
-	rm -f test/Test.o Test
+	rm -fr tests benchmark docs
+
+.PHONY: all docs clean
