@@ -6,6 +6,7 @@
 *.exe
 *.o
 *.so
+C++/Test
 
 # Packages #
 ############
@@ -37,7 +38,7 @@ ehthumbs.db
 Thumbs.db
 # Extra #
 *.xml
-.vscode/*
+C++/.vscode/*
 ./python/.idea/*
 *.ipynb
 ./python/.ipnb*/*
