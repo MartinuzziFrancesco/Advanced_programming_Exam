@@ -137,7 +137,7 @@ void BST<K, V>::balance_med(std::vector<pair>& vect, std::size_t left, std::size
 /* OPERATOR[] */
 
 template<typename K, typename V>
-V& BST<K,V>::operator[](const K& key)noexcept {
+V& BST<K,V>::operator[](const K& key) noexcept {
 
   Iterator i = find(key);
 

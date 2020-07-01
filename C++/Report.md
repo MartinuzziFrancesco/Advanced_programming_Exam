@@ -17,7 +17,23 @@ The construction of the BST is implemented in a `class`, since we want to have m
 
 This two classes are used to perform forward iterations on the tree. They are constructed building over the standard library class `iterator`. The iterators are set to public, since we want them to be available for the user. The overload of the operator ++ allows them to only move forward starting from a node.
 # Methods
+As requested the our BST has the following public member function:
+    insert(const pair& p), used to insert a new pair key-value;
+    clear(), clear the content of the tree;
+    begin(), return an iterator to the first node (which likely will not be the root node);
+    end(), return a proper iterator;
+    cbegin(), return a const_iterator to the first node;
+    cend(), return a proper const_iterator;
+    balance(), balance the tree.;
+    find(const K key), find a given key and return an iterator to that node. If the key is not found returns end();
 
+Also whose are implemented;
+    operator[](const K& key) function, the const and non-const versions. This functions, return a reference to the value associated to the key k. If the key is not present, a new node with key k is allocated having the value: value_type{};
+    operator<<: in order to print (in order) key: value of all the nodes in the tree;
+    copy and move semantics;
+    getmin() return pointer to the node with minimun key_value;
+
+For deatail and documentation see Doxygen.
 
 # Tests and Benchmarks
 In the file `Test.cpp` can be found tests for every method implemented in the project. The source code is readable and easy to tweak for the user and functions also as a diplay for the use of the BST and its methods.
