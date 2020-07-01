@@ -49,7 +49,7 @@ int main()
   ofstream results_file_stdumap;
   results_file_stdumap.open(PATH_NAME + "stdumap.txt");
 
-  for (uint i = 100; i < N_max; i *= 1.2)
+  for (uint i = 1000; i < N_max; i *= 1.1)
   {
     BST<int, int> bst;
     //BST<int, int> bst_linear;
@@ -85,8 +85,6 @@ int main()
     take_time(std_map, results_file_stdmap, values);
     take_time(std_umap, results_file_stdumap, values);
     
-    
-
     //balance tree
     bst.balance();
     //take time and store it in file
