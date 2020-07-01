@@ -17,6 +17,8 @@ The construction of the BST is implemented in a `class`, since we want to have m
 
 This two classes are used to perform forward iterations on the tree. They are constructed building over the standard library class `iterator`. The iterators are set to public, since we want them to be available for the user. The overload of the operator ++ allows them to only move forward starting from a node.
 # Methods
+
+
 # Tests and Benchmarks
 In the file `Test.cpp` can be found tests for every method implemented in the project. The source code is readable and easy to tweak for the user and functions also as a diplay for the use of the BST and its methods.
 

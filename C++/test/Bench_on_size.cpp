@@ -21,7 +21,7 @@ string PATH_NAME = "benchmark_results/Benchmark_On_Size_";
 
 template <class T, typename V>
 void take_time(T bst, ofstream &results_file, std::vector<V> &values){
-  double median=0;
+  double mean{0};
   for (int i = 1; i <= n_try; i++){  
     auto start_time = chrono::high_resolution_clock::now();
     for (int j = 1; j <= n_find; j++)
@@ -30,10 +30,10 @@ void take_time(T bst, ofstream &results_file, std::vector<V> &values){
     }
     auto end_time = chrono::high_resolution_clock::now();
     auto total_time = chrono::duration_cast<chrono::microseconds>(end_time - start_time).count();
-    median+=total_time;  
+    mean+=total_time;  
   }
-  median/=n_try;
-  results_file << values.size() << ",\t\t" << median << ",\t\t" << median / double(n_find) << ",\t\t" << log2(median / double(n_find)) << endl;
+  mean/=n_try;
+  results_file << values.size() << ",\t\t" << mean << ",\t\t" << mean / double(n_find) << ",\t\t" << log2(mean / double(n_find)) << endl;
 };
 
 int main()
