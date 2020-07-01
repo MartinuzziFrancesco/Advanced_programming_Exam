@@ -23,3 +23,21 @@ This two classes are used to perform forward iterations on the tree. They are co
 In the file `Test.cpp` can be found tests for every method implemented in the project. The source code is readable and easy to tweak for the user and functions also as a diplay for the use of the BST and its methods.
 
 In the file `Benchmark.cpp` is contained a comparison of the `find()` function between a BST, an ordered BST, a standard library `map` and a standard library `unordered_map`. The test is done creating a vector of a given dimension containing `int` values ranging from 1 to the max value (the max value is increased at every iteration). They are ordered by construction, but are reshuffled in order to simulate randomness. After that the BST, map and unordered map are constructed from this vector and the time to search random values is collected. To have more statistics this procedure is done multiple times and an average is taken. The results are then printed on file and can be easily be plotted.
+
+![image](https://user-images.githubusercontent.com/10376688/86258865-97e70680-bbbb-11ea-859c-355ccbac5101.png)
+
+We can clearly see from the picture that the standard library implementation for the unbalanced map is by far the fastest, as it is to be expected: in the average case the complexity is constant, and in the worst case scenario is linear in container size [[1]](#1). As for our implementation we can see that the unbalanced tree is returning the worst performance of all the analyzed alghoritms, but when we use the balanced tree the `find()` times are faster that the standard library implementation of `map`, that it's worth mentioning is also based on search trees, so the complexity time is also logaritmic with the size [[2]](#2). We can spot a polynomial trend in the balanced and unbalanced trees and in the std `map`, a results we exepcted and were really happy to see. If we were to increase the number of nodes a little more perhaps the log distribution would be more clear, but the large amount of memory occupation doesn't allow us to go further than a dezon millions. We can also plot the ressults in loglog to see if it returns a straight line: in that case we would know that the behaviour is actually logaritmic.
+
+![image](https://user-images.githubusercontent.com/10376688/86259628-88b48880-bbbc-11ea-93b0-682802b59a10.png)
+
+In the lower values the trend is not really linear, but after a few thousands the linearity can be clearly seen. 
+
+Overall we are pretty satisifed with the results, using a machine with a little more RAM could have helped us in a better display, but even with a limitate statistic we can see that the behaviour is as intended.
+
+
+
+## References
+<a id="1">[1]</a>
+http://www.cplusplus.com/reference/unordered_map/unordered_map/find/
+<a id="2">[2]</a>
+https://en.cppreference.com/w/cpp/container/map/find
