@@ -71,7 +71,6 @@ void benchmark_bst_stdmap(){
 };
 
 int main(){
-  //compare int BST and float BST
   benchmark_bst_stdmap();
   return 0;
 };
